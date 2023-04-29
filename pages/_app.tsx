@@ -21,6 +21,17 @@ import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
+
 import PageChange from "../components/PageChange/PageChange";
 
 import "/styles/scss/nextjs-material-kit.scss?v=1.2.0";
@@ -41,6 +52,16 @@ Router.events.on("routeChangeError", () => {
   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
   document.body.classList.remove("body-page-transition");
 });
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 export default class MyApp extends App {
   static async getInitialProps({ Component, router, ctx }) {

@@ -1,5 +1,7 @@
-import React, { Component } from "react";
-import Router from "next/router";
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Button from "../components/CustomButtons/Button";
 
 // nodejs library that concatenates classes
 import classNames from "classnames";
@@ -8,40 +10,41 @@ import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
-import Header from "../components/Header/Header";
-import HeaderLinks from "../components/Header/HeaderLinks";
-import Footer from "../components/Footer/Footer";
 import GridContainer from "../components/Grid/GridContainer";
 import GridItem from "../components/Grid/GridItem";
-import Parallax from "../components/Parallax/Parallax";
 // sections for this page
-import SectionBasics from "../pages-sections/Components-Sections/SectionBasics";
 
 import styles from "../styles/jss/nextjs-material-kit/pages/components";
+import typographyStyles from "../styles/jss/nextjs-material-kit/pages/componentsSections/typographyStyle";
 
 const useStyles = makeStyles(styles);
+const useTypographyStyles = makeStyles(typographyStyles);
 
 export default function Home({ allPostsData }) {
   const classes = useStyles();
+  const typographyClasses = useTypographyStyles();
 
   return (
     <div>
-      <div className={classes.container}>
-        <GridContainer>
-          <GridItem>
-            <div className={classes.brand}>
-              <h1 className={classes.title}>Budget GPT</h1>
-              <h3 className={classes.subtitle}>
-                Feel good about your financial health
-              </h3>
-            </div>
-          </GridItem>
-        </GridContainer>
-      </div>
-
-      <div className={classNames(classes.mainRaised)}>
-        <div className={classes.sections}>
-          <div className={classes.container}></div>
+      <div className={typographyClasses.section}>
+        <div className={typographyClasses.container}>
+          <GridContainer>
+            <GridItem>
+              <h1>Budget GPT</h1>
+              <h2>
+                We help you understand your spending habits so you can focus on
+                what's important
+              </h2>
+              <Image alt="logo" src="/img/logo.jpg" width={500} height={500} />
+            </GridItem>
+          </GridContainer>
+          <GridContainer>
+            <GridItem>
+              <Link href="/basics">
+                <Button color="rose">Start</Button>
+              </Link>
+            </GridItem>
+          </GridContainer>
         </div>
       </div>
     </div>

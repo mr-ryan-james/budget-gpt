@@ -16,7 +16,7 @@ const componentsStyle = {
     fontSize: "1.313rem",
     maxWidth: "510px",
     margin: "10px 0 0",
-    color: "black",
+    color: "#5f3dc4",
   },
   main: {
     background: "#FFFFFF",

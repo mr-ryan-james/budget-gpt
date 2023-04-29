@@ -1,0 +1,48 @@
+.indicatorContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  border-top: 1px solid #000;
+}
+
+.text {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+  color: #fff;
+}
+
+.completed {
+  background-color: green;
+}
+
+.current {
+  background-color: blue;
+}
