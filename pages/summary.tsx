@@ -20,27 +20,13 @@ import typographyStyles from "../styles/jss/nextjs-material-kit/pages/components
 const useTypographyStyles = makeStyles(typographyStyles);
 
 const pieData = {
-  labels: ["Rent", "Food", "Dates", "Flowers", "Movies", "Medicine"],
+  labels: [],
   datasets: [
     {
-      label: "Expenses",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
+      label: "Needs Improvement",
+      data: [60, 40],
+      backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
+      borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
       borderWidth: 1,
     },
   ],
@@ -74,7 +60,7 @@ export default function Summary() {
             <GridItem xs={3} sm={3} md={3}>
               <Bar
                 data={barData}
-                height={300}
+                height={400}
                 options={{
                   responsive: true,
                   maintainAspectRatio: true,
@@ -91,8 +77,22 @@ export default function Summary() {
               />
             </GridItem>
 
-            <GridItem xs={3} sm={3} md={3}>
-              <Pie options={{ maintainAspectRatio: true }} data={pieData} />
+            <GridItem xs={4} sm={4} md={4}>
+              <Pie
+                height={500}
+                options={{ maintainAspectRatio: true }}
+                data={pieData}
+              />
+            </GridItem>
+          </GridContainer>
+          <GridContainer>
+            <GridItem xs={4} sm={4} md={4}>
+              <h3>Wellness Score</h3>
+              <Pie
+                height={500}
+                options={{ maintainAspectRatio: true }}
+                data={pieData}
+              />
             </GridItem>
           </GridContainer>
         </div>
