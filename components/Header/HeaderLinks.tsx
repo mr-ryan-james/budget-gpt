@@ -33,11 +33,11 @@ export default function HeaderLinks(props) {
           buttonText="Components"
           buttonProps={{
             className: classes.navLink,
-            color: "transparent"
+            color: "transparent",
           }}
           buttonIcon={Apps}
           dropdownList={[
-            <Link href="/components">
+            <Link legacyBehavior href="/components">
               <a className={classes.dropdownLink}>All components</a>
             </Link>,
             <a
@@ -46,17 +46,14 @@ export default function HeaderLinks(props) {
               className={classes.dropdownLink}
             >
               Documentation
-            </a>
+            </a>,
           ]}
         />
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button
-          href="blog"
-          color="transparent"
-          className={classes.navLink}
-        >
-          <i className={classes.socialIcons + " fa fa-rss"} />Blog
+        <Button href="blog" color="transparent" className={classes.navLink}>
+          <i className={classes.socialIcons + " fa fa-rss"} />
+          Blog
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
