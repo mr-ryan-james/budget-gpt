@@ -96,7 +96,7 @@ async function getInitialProps({ Component, router, ctx }) {
 
 const queryClient = new QueryClient();
 
-function BudgetGPT(props) {
+function Thrive(props) {
   // Destructure the props
   const { Component, pageProps, name } = props;
 
@@ -108,12 +108,12 @@ function BudgetGPT(props) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
-        <title>BudgetGPT</title>
+        <title>Thrive</title>
       </Head>
       <Component {...pageProps} />
     </QueryClientProvider>
   );
 }
 
-BudgetGPT.getInitialProps = getInitialProps;
-export default BudgetGPT;
+Thrive.getInitialProps = getInitialProps;
+export default Thrive;
