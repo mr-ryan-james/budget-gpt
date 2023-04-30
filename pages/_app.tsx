@@ -73,12 +73,11 @@ async function getInitialProps({ Component, router, ctx }) {
   const { name } = ctx.query;
 
   let nameToUse = name;
-  if (name) {
-    //set cookie on ctx
-    ctx.res.setHeader("Set-Cookie", `name=${name};`);
-  } else {
+  if (!name) {
     nameToUse = ctx.req?.headers?.cookie?.split("=")[1] ?? "Bob";
   }
+
+  ctx.res?.setHeader("Set-Cookie", `name=${nameToUse};`);
 
   return { pageProps, name: nameToUse };
 }
