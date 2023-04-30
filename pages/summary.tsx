@@ -48,18 +48,6 @@ const getPieData = (expenses) => ({
   ],
 });
 
-const welnessData = {
-  labels: ["Healthy", "Needs improvement"],
-  datasets: [
-    {
-      label: "",
-      data: [60, 40],
-      backgroundColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
-      hoverOffset: 4,
-    },
-  ],
-};
-
 const getBarData = (income, expense) => ({
   labels: [""],
   datasets: [
@@ -103,7 +91,12 @@ export default function Summary({ expenses, income, totalExpense }) {
     },
   });
 
-  console.log({ expenses, income, totalExpense });
+  console.log({
+    expenses,
+    income,
+    totalExpense,
+    wellnessHistory,
+  });
 
   return (
     <div>
@@ -161,21 +154,29 @@ export default function Summary({ expenses, income, totalExpense }) {
           <GridContainer>
             <GridItem xs={4} sm={6} md={6}>
               <h3>Wellness Score</h3>
-              <h4>{wellnessHistory?.[0].explanation}</h4>
-              <Pie
-                height={500}
-                options={{
-                  maintainAspectRatio: true,
-                  plugins: {
-                    tooltip: {
-                      borderColor: "white",
-                      borderWidth: 3,
-                      padding: 6,
-                    },
-                  },
+              <h4>{wellnessHistory?.[0]?.explanation}</h4>
+              <div
+                style={{
+                  width: 400,
+                  height: 400,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    "#" + Math.floor(Math.random() * 16777215).toString(16),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
+                  opacity: 0.5,
                 }}
-                data={welnessData}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: 100,
+                    color: "black",
+                  }}
+                >
+                  {wellnessHistory?.[0]?.wellness_score}
+                </span>
+              </div>
             </GridItem>
           </GridContainer>
         </div>
