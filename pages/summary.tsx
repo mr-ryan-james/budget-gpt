@@ -160,8 +160,7 @@ export default function Summary({ expenses, income, totalExpense }) {
                   width: 400,
                   height: 400,
                   borderRadius: "50%",
-                  backgroundColor:
-                    "#" + Math.floor(Math.random() * 16777215).toString(16),
+                  backgroundColor: "rgba(0, 255, 0, 0.3)",
                   alignItems: "center",
                   justifyContent: "center",
                   display: "flex",
