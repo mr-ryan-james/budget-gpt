@@ -42,12 +42,18 @@ export default function Recommendations() {
   console.log({ aboutMe, recommendations, wellnessHistory });
   console.log({ aboutMeError, recommendationsError, wellnessHistoryerror });
 
+  const reversedWellnessHistory = [...(wellnessHistory || [])]?.reverse();
+
+  console.log({ reversedWellnessHistory });
+
   const lineGraphData = {
-    labels: wellnessHistory?.reverse().map((wellness) => wellness.date),
+    labels: reversedWellnessHistory?.map((wellness) => wellness.date),
     datasets: [
       {
         label: "Wellness",
-        data: wellnessHistory?.map((wellness) => wellness.wellness_score),
+        data: reversedWellnessHistory?.map(
+          (wellness) => wellness.wellness_score
+        ),
         fill: false,
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgba(255, 99, 132, 0.2)",
