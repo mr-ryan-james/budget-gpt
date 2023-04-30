@@ -30,7 +30,7 @@ export default function Home({ allPostsData }) {
         <div className={typographyClasses.container}>
           <GridContainer>
             <GridItem>
-              <h1>Budget GPT</h1>
+              <h1>Thrive</h1>
               <h2>
                 We help you understand your spending habits so you can focus on
                 what's important

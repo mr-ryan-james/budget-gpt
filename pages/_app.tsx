@@ -30,6 +30,9 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  LineController,
+  LineElement,
+  PointElement,
 } from "chart.js";
 
 import PageChange from "../components/PageChange/PageChange";
@@ -60,7 +63,15 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
 );
 
 async function getInitialProps({ Component, router, ctx }) {

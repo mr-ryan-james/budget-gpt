@@ -1,1 +1,1 @@
-# Budget GPT
+# Thrive

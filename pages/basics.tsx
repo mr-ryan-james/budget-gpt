@@ -127,7 +127,7 @@ export default function Basics({ emotionData }) {
     <div>
       <div className={typographyClasses.section}>
         <div className={typographyClasses.container}>
-          <ProgressIndicator currentStep="Data Inputs" />
+          <ProgressIndicator currentStepName="Data Inputs" />
           <GridContainer>
             <GridItem>
               <h4>

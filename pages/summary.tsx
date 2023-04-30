@@ -16,15 +16,17 @@ import GridItem from "../components/Grid/GridItem";
 // sections for this page
 
 import typographyStyles from "../styles/jss/nextjs-material-kit/pages/componentsSections/typographyStyle";
+import { getBudget } from "./api/budget";
+import { getWellness } from "./api/wellness";
 
 const useTypographyStyles = makeStyles(typographyStyles);
 
-const pieData = {
-  labels: ["Rent", "Food", "Dates", "Flowers", "Movies", "Medicine"],
+const getPieData = (expenses) => ({
+  labels: expenses.map((item) => item.category),
   datasets: [
     {
       label: "Expenses",
-      data: [12, 19, 3, 5, 2, 3],
+      data: expenses.map((item) => item.amount),
       backgroundColor: [
         "rgba(255, 99, 132, 0.2)",
         "rgba(54, 162, 235, 0.2)",
@@ -44,13 +46,13 @@ const pieData = {
       borderWidth: 1,
     },
   ],
-};
+});
 
 const welnessData = {
-  labels: ["Completed", "Needs improvement"],
+  labels: ["Healthy", "Needs improvement"],
   datasets: [
     {
-      label: "Wellness Score",
+      label: "",
       data: [60, 40],
       backgroundColor: ["rgb(75, 192, 192)", "rgb(255, 99, 132)"],
       hoverOffset: 4,
@@ -58,38 +60,65 @@ const welnessData = {
   ],
 };
 
-const barData = {
+const getBarData = (income, expense) => ({
   labels: [""],
   datasets: [
     {
       label: "Income",
-      data: [6500],
+      data: [income],
       backgroundColor: "rgb(255, 99, 132)",
     },
     {
       label: "Expenses",
-      data: [2800],
+      data: [expense],
       backgroundColor: "rgb(54, 162, 235)",
     },
   ],
-};
+});
 
-export default function Summary() {
+export async function getServerSideProps(context) {
+  const name = context.req.cookies.name;
+
+  const budgetData = await getBudget(name);
+  const [wellnessScore] = await getWellness(name);
+
+  const expenses = budgetData.filter((item) => item.is_expense);
+  const [income] = budgetData.filter((item) => !item.is_expense);
+  const totalExpense = expenses.reduce((acc, item) => acc + item.amount, 0);
+
+  return {
+    props: { expenses, income: income?.amount, totalExpense, wellnessScore }, // will be passed to the page component as props
+  };
+}
+
+export default function Summary({
+  expenses,
+  income,
+  totalExpense,
+  wellnessScore,
+}) {
   const typographyClasses = useTypographyStyles();
+
+  console.log({ expenses, income, totalExpense });
 
   return (
     <div>
       <div className={typographyClasses.section}>
         <div className={typographyClasses.container}>
-          <ProgressIndicator currentStep="Summary" />
+          <ProgressIndicator currentStepName="Summary" />
           <GridContainer>
-            <GridItem xs={3} sm={3} md={3}>
+            <GridItem xs={3} sm={6} md={6}>
               <Bar
-                data={barData}
+                data={getBarData(income, totalExpense)}
                 height={400}
                 options={{
                   responsive: true,
                   maintainAspectRatio: true,
+                  scales: {
+                    y: {
+                      max: Math.max(income, totalExpense) * 1.2,
+                    },
+                  },
                   plugins: {
                     legend: {
                       position: "top" as const,
@@ -108,7 +137,7 @@ export default function Summary() {
               />
             </GridItem>
 
-            <GridItem xs={4} sm={4} md={4}>
+            <GridItem xs={4} sm={6} md={6}>
               <Pie
                 height={500}
                 options={{
@@ -121,13 +150,14 @@ export default function Summary() {
                     },
                   },
                 }}
-                data={pieData}
+                data={getPieData(expenses)}
               />
             </GridItem>
           </GridContainer>
           <GridContainer>
-            <GridItem xs={4} sm={4} md={4}>
+            <GridItem xs={4} sm={6} md={6}>
               <h3>Wellness Score</h3>
+              <h4>{wellnessScore?.explanation}</h4>
               <Pie
                 height={500}
                 options={{
@@ -150,8 +180,8 @@ export default function Summary() {
         <div className={typographyClasses.container}>
           <GridContainer>
             <GridItem>
-              <Link href="/basics">
-                <Button color="rose">Recommendations</Button>
+              <Link href="/recommendations">
+                <Button color="facebook">Recommendations</Button>
               </Link>
             </GridItem>
           </GridContainer>
