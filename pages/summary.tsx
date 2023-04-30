@@ -17,7 +17,7 @@ import GridItem from "../components/Grid/GridItem";
 
 import typographyStyles from "../styles/jss/nextjs-material-kit/pages/componentsSections/typographyStyle";
 import { getBudget } from "./api/budget";
-import { getWellness } from "./api/wellness";
+import { useQuery } from "@tanstack/react-query";
 
 const useTypographyStyles = makeStyles(typographyStyles);
 
@@ -80,24 +80,25 @@ export async function getServerSideProps(context) {
   const name = context.req.cookies.name;
 
   const budgetData = await getBudget(name);
-  const [wellnessScore] = await getWellness(name);
 
   const expenses = budgetData.filter((item) => item.is_expense);
   const [income] = budgetData.filter((item) => !item.is_expense);
   const totalExpense = expenses.reduce((acc, item) => acc + item.amount, 0);
 
   return {
-    props: { expenses, income: income?.amount, totalExpense, wellnessScore }, // will be passed to the page component as props
+    props: { expenses, income: income?.amount, totalExpense }, // will be passed to the page component as props
   };
 }
 
-export default function Summary({
-  expenses,
-  income,
-  totalExpense,
-  wellnessScore,
-}) {
+export default function Summary({ expenses, income, totalExpense }) {
   const typographyClasses = useTypographyStyles();
+
+  const { data: wellnessHistory, error: wellnessHistoryerror } = useQuery({
+    queryKey: ["wellness"],
+    queryFn: () => {
+      return fetch(`/api/wellness`).then((res) => res.json());
+    },
+  });
 
   console.log({ expenses, income, totalExpense });
 
@@ -157,7 +158,7 @@ export default function Summary({
           <GridContainer>
             <GridItem xs={4} sm={6} md={6}>
               <h3>Wellness Score</h3>
-              <h4>{wellnessScore?.explanation}</h4>
+              <h4>{wellnessHistory?.[0].explanation}</h4>
               <Pie
                 height={500}
                 options={{
