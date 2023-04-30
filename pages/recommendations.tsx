@@ -43,15 +43,11 @@ export default function Recommendations() {
   console.log({ aboutMeError, recommendationsError, wellnessHistoryerror });
 
   const lineGraphData = {
-    labels: wellnessHistory?.map((wellness) => wellness.date),
+    labels: wellnessHistory?.reverse().map((wellness) => wellness.date),
     datasets: [
       {
         label: "Wellness",
-        data: wellnessHistory?.map((wellness) =>
-          wellness.wellness_score <= 1
-            ? wellness.wellness_score * 10
-            : wellness.wellness_score
-        ),
+        data: wellnessHistory?.map((wellness) => wellness.wellness_score),
         fill: false,
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgba(255, 99, 132, 0.2)",
