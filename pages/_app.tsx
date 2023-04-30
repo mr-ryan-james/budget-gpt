@@ -63,30 +63,54 @@ ChartJS.register(
   ArcElement
 );
 
-export default class MyApp extends App {
-  static async getInitialProps({ Component, router, ctx }) {
-    let pageProps = {};
+async function getInitialProps({ Component, router, ctx }) {
+  let pageProps = {};
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    return { pageProps };
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
   }
-  render() {
-    const { Component, pageProps } = this.props;
 
-    return (
-      <React.Fragment>
-        <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
-          <title>BudgetGPT</title>
-        </Head>
-        <Component {...pageProps} />
-      </React.Fragment>
-    );
+  const { name } = ctx.query;
+
+  let nameToUse = name;
+  if (name) {
+    //set cookie on ctx
+    ctx.res.setHeader("Set-Cookie", `name=${name};`);
+  } else {
+    nameToUse = ctx.req?.headers?.cookie?.split("=")[1];
   }
+
+  return { pageProps, name: nameToUse };
 }
+
+const NameContext = React.createContext("nameContext");
+
+function BudgetGPT(props) {
+  // Destructure the props
+  const { Component, pageProps, name } = props;
+
+  const [initialName] = React.useState(name);
+
+  console.log({ initialName });
+
+  // Return the JSX
+  return (
+    <React.Fragment>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <title>BudgetGPT</title>
+      </Head>
+      <NameContext.Provider value={initialName || "fuck you"}>
+        <Component {...pageProps} />
+      </NameContext.Provider>
+    </React.Fragment>
+  );
+}
+
+export { NameContext };
+
+BudgetGPT.getInitialProps = getInitialProps;
+export default BudgetGPT;
