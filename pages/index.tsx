@@ -31,11 +31,15 @@ export default function Home({ allPostsData }) {
           <GridContainer>
             <GridItem>
               <h1>Thrįve</h1>
-              <h2>
-                We help you understand your spending habits so you can focus on
-                what's important
-              </h2>
               <Image alt="logo" src="/img/logo.jpg" width={500} height={500} />
+              <h4>
+                To achieve financial wellness 💰, let go of perfection and focus
+                on progress 📈. Organize your finances 📊 but also reflect on
+                your emotional 😊 relationship with money 💵. Make conscious 🧠
+                choices about spending 💳 and saving 💵. It’s like martial arts
+                🥋 - learn the moves with patience 🧘‍♀️ and calmness, become the
+                master 💪 of your money, and enjoy peace of mind 😌
+              </h4>
             </GridItem>
           </GridContainer>
           <GridContainer>
@@ -43,6 +47,14 @@ export default function Home({ allPostsData }) {
               <Link href="/basics">
                 <Button color="rose">Start</Button>
               </Link>
+              <h6>
+                Disclaimer: Thrive strives for the highest degree of excellence
+                in its mission to make personal finances a joy. Rarely,
+                responses may contain non-factual information, especially on
+                topics beyond our capabilities. For critical information,
+                AI-generated responses should be verified through reputable
+                sources.
+              </h6>
             </GridItem>
           </GridContainer>
         </div>
