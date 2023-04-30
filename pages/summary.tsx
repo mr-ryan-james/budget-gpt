@@ -86,8 +86,10 @@ export async function getServerSideProps(context) {
   const totalExpense = expenses.reduce((acc, item) => acc + item.amount, 0);
   const income = incomes.reduce((acc, item) => acc + item.amount, 0);
 
+  console.log({ budgetData });
+
   return {
-    props: { expenses, income: income?.amount, totalExpense }, // will be passed to the page component as props
+    props: { expenses, income: income, totalExpense }, // will be passed to the page component as props
   };
 }
 
