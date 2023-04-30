@@ -1,13 +1,26 @@
+import retry from "async-retry";
+
 export function getEmotions(name) {
-  return fetch(
-    `https://5cf1-66-81-178-197.ngrok-free.app/emotions_history?name=${name}`,
+  return retry(
+    async () => {
+      const fetchResponse = await fetch(
+        `https://5cf1-66-81-178-197.ngrok-free.app/emotions_history?name=${name}`,
+        {
+          // Specify the headers to accept JSON
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      return fetchResponse.json();
+    },
     {
-      // Specify the headers to accept JSON
-      headers: {
-        Accept: "application/json",
-      },
+      retries: 5,
+      minTimeout: 250,
+      maxTimeout: 5000,
     }
-  ).then((res) => res.json());
+  );
 }
 
 export default async function handler(req, res) {
@@ -22,14 +35,24 @@ export default async function handler(req, res) {
       (emotion) => selectedEmotions[emotion]
     );
     console.log({ newEmotions });
-    const resEmotion = await fetch(
-      `https://5cf1-66-81-178-197.ngrok-free.app/emotions?name=${name}`,
+    const resEmotion = await retry(
+      async () => {
+        const resEmotionRes = await fetch(
+          `https://5cf1-66-81-178-197.ngrok-free.app/emotions?name=${name}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newEmotions),
+          }
+        );
+        return resEmotionRes.json();
+      },
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newEmotions),
+        retries: 5,
+        minTimeout: 1000,
+        maxTimeout: 5000,
       }
     );
 
