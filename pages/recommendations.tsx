@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Line } from "react-chartjs-2";
 import ProgressIndicator from "../components/ProgressIndicator/ProgressIndicator";
 
-// nodejs library that concatenates classes
-// react components for routing our app without refresh
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
@@ -12,36 +9,45 @@ import GridContainer from "../components/Grid/GridContainer";
 import GridItem from "../components/Grid/GridItem";
 // sections for this page
 
+import { useQuery } from "@tanstack/react-query";
+
 import typographyStyles from "../styles/jss/nextjs-material-kit/pages/componentsSections/typographyStyle";
-import { getAboutMe } from "./api/aboutMe";
-import { getRecommendations } from "./api/recommendations";
-import { getWellness } from "./api/wellness";
 
 const useTypographyStyles = makeStyles(typographyStyles);
 
-export async function getServerSideProps(context) {
-  const name = context.req.cookies.name;
-
-  const aboutMe = await getAboutMe(name);
-  const recommendations = await getRecommendations(name);
-  const wellnessHistory = await getWellness(name);
-
-  return {
-    props: { aboutMe, recommendations, wellnessHistory }, // will be passed to the page component as props
-  };
-}
-
-export default function Basics({ aboutMe, recommendations, wellnessHistory }) {
+export default function Recommendations() {
   const typographyClasses = useTypographyStyles();
 
-  console.log({ aboutMe, recommendations, wellnessHistory });
+  const { data: aboutMe, error: aboutMeError } = useQuery({
+    queryKey: ["aboutMe"],
+    queryFn: () => {
+      return fetch(`/api/aboutMe`).then((res) => res.json());
+    },
+  });
 
-  const data = {
-    labels: wellnessHistory.reverse().map((wellness) => wellness.date),
+  const { data: wellnessHistory, error: wellnessHistoryerror } = useQuery({
+    queryKey: ["wellness"],
+    queryFn: () => {
+      return fetch(`/api/wellness`).then((res) => res.json());
+    },
+  });
+
+  const { data: recommendations, error: recommendationsError } = useQuery({
+    queryKey: ["recommendations"],
+    queryFn: () => {
+      return fetch(`/api/recommendations`).then((res) => res.json());
+    },
+  });
+
+  console.log({ aboutMe, recommendations, wellnessHistory });
+  console.log({ aboutMeError, recommendationsError, wellnessHistoryerror });
+
+  const lineGraphData = {
+    labels: wellnessHistory?.map((wellness) => wellness.date),
     datasets: [
       {
         label: "Wellness",
-        data: wellnessHistory.map((wellness) =>
+        data: wellnessHistory?.map((wellness) =>
           wellness.wellness_score <= 1
             ? wellness.wellness_score * 10
             : wellness.wellness_score
@@ -67,25 +73,55 @@ export default function Basics({ aboutMe, recommendations, wellnessHistory }) {
       <div className={typographyClasses.section}>
         <div className={typographyClasses.container}>
           <ProgressIndicator currentStepName="Recommendations" />
-          <GridContainer>
-            <GridItem>
-              <h2>Summary</h2>
-              <h4>{aboutMe?.description}</h4>
-              <Line data={data} options={options} />
-            </GridItem>
-          </GridContainer>
-          <GridContainer>
-            <h3>Money Feelings</h3>
-            <h4>{recommendations?.money_feelings}</h4>
-          </GridContainer>
-          <GridContainer>
-            <h3>Spending and Saving</h3>
-            <h4>{recommendations?.spending_and_saving}</h4>
-          </GridContainer>
-          <GridContainer>
-            <h3>Opportunities</h3>
-            <h4>{recommendations?.opportunities}</h4>
-          </GridContainer>
+          {(!aboutMe || !wellnessHistory) && (
+            <GridContainer>
+              <GridItem>
+                <h2>Summary</h2>
+                <h4>Loading</h4>
+              </GridItem>
+            </GridContainer>
+          )}
+          {aboutMe && wellnessHistory && (
+            <GridContainer>
+              <GridItem>
+                <h2>Summary</h2>
+                {aboutMe && <h4>{aboutMe?.description}</h4>}
+                {wellnessHistory && (
+                  <Line data={lineGraphData} options={options} />
+                )}
+              </GridItem>
+            </GridContainer>
+          )}
+          {!recommendations && (
+            <GridContainer>
+              <GridItem>
+                <h3>Recommendations</h3>
+                <h4>Loading</h4>
+              </GridItem>
+            </GridContainer>
+          )}
+          {recommendations && (
+            <>
+              <GridContainer>
+                <GridItem>
+                  <h3>Money Feelings</h3>
+                  {<h4>{recommendations?.money_feelings}</h4>}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem>
+                  <h3>Spending and Saving</h3>
+                  <h4>{recommendations?.spending_and_saving}</h4>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem>
+                  <h3>Opportunities</h3>
+                  <h4>{recommendations?.opportunities}</h4>
+                </GridItem>
+              </GridContainer>
+            </>
+          )}
         </div>
 
         <div className={typographyClasses.section}>

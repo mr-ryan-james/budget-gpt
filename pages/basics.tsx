@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Button from "../components/CustomButtons/Button";
 import { useRouter } from "next/router";
 import ProgressIndicator from "../components/ProgressIndicator/ProgressIndicator";
@@ -14,7 +14,6 @@ import GridItem from "../components/Grid/GridItem";
 // sections for this page
 
 import typographyStyles from "../styles/jss/nextjs-material-kit/pages/componentsSections/typographyStyle";
-import { NameContext } from "./_app";
 import PageChange from "../components/PageChange/PageChange";
 import { getEmotions } from "./api/emotions";
 
@@ -53,7 +52,6 @@ export async function getServerSideProps(context) {
 
 export default function Basics({ emotionData }) {
   const typographyClasses = useTypographyStyles();
-  const name = useContext(NameContext);
   const router = useRouter();
 
   const [posting, setPosting] = React.useState(false);

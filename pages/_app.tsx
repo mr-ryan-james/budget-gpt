@@ -20,6 +20,7 @@ import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import {
   Chart as ChartJS,
@@ -93,19 +94,15 @@ async function getInitialProps({ Component, router, ctx }) {
   return { pageProps, name: nameToUse };
 }
 
-const NameContext = React.createContext("nameContext");
+const queryClient = new QueryClient();
 
 function BudgetGPT(props) {
   // Destructure the props
   const { Component, pageProps, name } = props;
 
-  const [initialName] = React.useState(name);
-
-  console.log({ initialName });
-
   // Return the JSX
   return (
-    <React.Fragment>
+    <QueryClientProvider client={queryClient}>
       <Head>
         <meta
           name="viewport"
@@ -113,14 +110,10 @@ function BudgetGPT(props) {
         />
         <title>BudgetGPT</title>
       </Head>
-      <NameContext.Provider value={initialName || "fuck you"}>
-        <Component {...pageProps} />
-      </NameContext.Provider>
-    </React.Fragment>
+      <Component {...pageProps} />
+    </QueryClientProvider>
   );
 }
-
-export { NameContext };
 
 BudgetGPT.getInitialProps = getInitialProps;
 export default BudgetGPT;

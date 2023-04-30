@@ -24,7 +24,7 @@ export function getEmotions(name) {
 }
 
 export default async function handler(req, res) {
-  const { name } = req.query;
+  const { name } = req.cookies;
 
   if (req.method === "POST") {
     const { selectedEmotions } = req.body;

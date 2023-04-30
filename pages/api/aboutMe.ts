@@ -26,3 +26,9 @@ const getAboutMe = async (name: String) => {
 };
 
 export { getAboutMe };
+
+export default async function handler(req, res) {
+  const { name } = req.cookies;
+  const aboutMe = await getAboutMe(name);
+  res.status(200).json(aboutMe);
+}

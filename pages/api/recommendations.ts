@@ -26,3 +26,9 @@ const getRecommendations = async (name: String) => {
 };
 
 export { getRecommendations };
+
+export default async function handler(req, res) {
+  const { name } = req.cookies;
+  const recommendations = await getRecommendations(name);
+  res.status(200).json(recommendations);
+}

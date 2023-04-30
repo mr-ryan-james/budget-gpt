@@ -26,3 +26,9 @@ const getWellness = async (name: String) => {
 };
 
 export { getWellness };
+
+export default async function handler(req, res) {
+  const { name } = req.cookies;
+  const wellness = await getWellness(name);
+  res.status(200).json(wellness);
+}
